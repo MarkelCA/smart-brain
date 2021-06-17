@@ -1,14 +1,16 @@
 import './App.css';
 import Navigation from './components/Navigation/Navigation'
 import Logo from './components/Logo/Logo'
-//import ImageLinkForm from './ImageLinkForm'
+import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
 //import FaceRecognition from './FaceRecognition'
+//import Credits from './components/Credits/Credits'
 
 function App() {
   return (
     <div className="App">
         <Navigation />  
         <Logo />
+        <ImageLinkForm />
     </div>
   );
 }
