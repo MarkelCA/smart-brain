@@ -4,7 +4,7 @@ const ImageLinkForm = () => {
     return (
         <div id="image-link-form" className='z-10'>
             <p className="text-lg m-3 text-white border-b-2 border-blue-300"> This Magic Brain will detect faces in your pictures. Give it a try </p>
-            <div id="search-div" className="w-3/5 flex  justify-center m-auto shadow-xl p-4">
+            <div id="search-div" className="sm:w-full md:w-3/5 flex  justify-center m-auto shadow-xl p-4">
                 <input type="text" placeholder="Write here your image link" className='p-2 text-gray-600 w-3/4' />
                 <button id="search-button" className="
                     p-2
