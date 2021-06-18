@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+.particles {
+    position:fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 0;
+}
+
+#image-link-form, #navigation {
+    position: relative;
+    z-index: 1000000;
+}
+
+
