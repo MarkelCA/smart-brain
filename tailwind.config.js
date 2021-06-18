@@ -5,7 +5,9 @@ module.exports = {
     extend: {},
   },
   variants: {
-    extend: {},
+    extend: {
+        scale: ['active'] // to use the active: pseudoselector
+    },
   },
   plugins: [],
 }
