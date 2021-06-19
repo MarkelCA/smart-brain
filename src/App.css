@@ -11,7 +11,7 @@
     z-index: 0;
 }
 
-#image-link-form, #navigation {
+#image-link-form, #navigation, #face-box {
     position: relative;
     z-index: 1000000;
 }
