@@ -18,3 +18,4 @@ A teaser is deployed [here](https://markelca.github.io/smart-brain/), the **acco
 <p><b>Teaser with the app <em>unfinished</em>:<b></p>
 <img src='https://user-images.githubusercontent.com/76633510/122643412-f9c3b780-d10f-11eb-9927-a0b649ee41fb.png' width='60%'/>
 </div>
+
