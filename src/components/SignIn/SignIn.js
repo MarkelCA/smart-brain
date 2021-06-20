@@ -22,7 +22,7 @@ const SignUp = ({onSubmit, onRegister}) =>{
                                 type="submit"
                                 className="w-full text-center py-3 rounded bg-blue-600 text-gray-800 hover:text-white focus:text-white hover:bg-green-dark focus:outline-none my-1"
                             >Log in</button>
-                            <p className='development'>🔧 Not implemented yet. 🔧</p>
+                            <p className='development'>🔧 Not implemented yet, you can pass. 🔧</p>
                         </div>
 
                         <div className="text-grey-dark mt-6 bg-white px-2 py-5 rounded-lg shadow-md text-black w-full">
