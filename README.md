@@ -7,6 +7,8 @@ I'm using:
 - [react-tilty](https://www.npmjs.com/package/react-tilty): For the tiling [animation](https://codesandbox.io/s/73rqoq599j?fontsize=14&file=/src/index.js:0-27) on the logo
 - [particles.js](https://www.npmjs.com/package/react-tsparticles): For the background [animations](https://vincentgarreau.com/particles.js/) and interactivity.
 
+- [x] Interactive background: Click on the background to see what it does!
+
 ### Page deployed!
 A teaser is deployed [here](https://markelca.github.io/smart-brain/), the **accout authentification features are not working** and **more AI modes will be added** too.
 
