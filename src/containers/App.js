@@ -8,6 +8,8 @@ import Rank from '../components/Rank/Rank'
 import Particles from "react-tsparticles";
 import ParticlesConfig from "../particlesjs-config.json"
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition'
+import SignUp from '../components/SignUp/SignUp'
+import SignIn from '../components/SignIn/SignIn'
 //import Credits from './components/Credits/Credits'
 
 const app = new Clarifai.App({
@@ -19,7 +21,8 @@ constructor(props) {
     super(props);
     this.state = {
         imageUrl : '',
-        boxes: []
+        boxes: [],
+        route: 'signin'
     }
   }
 
@@ -68,16 +71,45 @@ constructor(props) {
           .catch(console.log)                   // the error is passed as a paremeter
 
     }
+    signIn = (e) => {
+        e.preventDefault()
+        this.setState({route: 'home'})
+    }
+    signOut = (e) => {
+        e.preventDefault()
+        this.setState({route: 'signin'})
+    }
+    register = (e) => {
+        e.preventDefault()
+        this.setState({route: 'register'})
+    }
+
     render(){
-          const {imageUrl, boxes } = this.state
+        const {imageUrl, boxes } = this.state
+        const signInCode = <SignIn onSubmit={this.signIn} onRegister={this.register} />
+        const signUpCode = <SignUp onSubmit={this.signIn} onLogin={this.signOut}/>
+        const homeCode = <React.Fragment>
+                            <Navigation onSignOut={this.signOut}/>  
+                            <Logo />
+                            <Rank />
+                            <ImageLinkForm submitted={this.onSubmitted}/>
+                            <FaceRecognition boxes={ boxes } imageUrl = { imageUrl } />
+                        </React.Fragment>
+        const { route } = this.state
       return (
         <div className="App">
           <Particles id="tsparticles" options={ParticlesConfig} />
-            <Navigation />  
-            <Logo />
-            <Rank />
-            <ImageLinkForm submitted={this.onSubmitted}/>
-            <FaceRecognition boxes={ boxes } imageUrl = { imageUrl } />
+            {
+                /*
+                 * if (signin) signInCode
+                 * else if (register) SignUpCode
+                 * else homeCode
+                 */
+                route === 'signin' ?  signInCode : 
+                    (
+                        route === 'register' ? signUpCode  : homeCode
+                    )
+            }
         </div>
           
       );

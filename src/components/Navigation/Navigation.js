@@ -1,7 +1,7 @@
-const Navigation = () => {
+const Navigation = ({onSignOut}) => {
     return (
         <nav id='navigation' className='bg-white flex justify-end p-5 border-b-2 border-pink-500'>
-            <p><a className='underline text-lg text-blue-900 hover:text-red-600 transition duration-200'>Sign out</a></p>
+            <a className='cursor-pointer underline text-lg text-blue-900 hover:text-red-600 transition duration-200' onClick={onSignOut}>Sign out</a>
 
         </nav>
 
