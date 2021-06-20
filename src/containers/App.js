@@ -1,13 +1,13 @@
 import './App.css';
 import React, { Component } from 'react'
 import Clarifai, {FACE_DETECT_MODEL} from 'clarifai';
-import Navigation from './components/Navigation/Navigation'
-import Logo from './components/Logo/Logo'
-import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
-import Rank from './components/Rank/Rank'
+import Navigation from '../components/Navigation/Navigation'
+import Logo from '../components/Logo/Logo'
+import ImageLinkForm from '../components/ImageLinkForm/ImageLinkForm'
+import Rank from '../components/Rank/Rank'
 import Particles from "react-tsparticles";
-import ParticlesConfig from "./particlesjs-config.json"
-import FaceRecognition from './components/FaceRecognition/FaceRecognition'
+import ParticlesConfig from "../particlesjs-config.json"
+import FaceRecognition from '../components/FaceRecognition/FaceRecognition'
 //import Credits from './components/Credits/Credits'
 
 const app = new Clarifai.App({
@@ -19,28 +19,36 @@ constructor(props) {
     super(props);
     this.state = {
         imageUrl : '',
-        faceBox : {}
+        boxes: []
     }
   }
-    calculateFaceLocation = ({outputs}) => {
-        console.log(outputs)
-        const clarifaiFace = outputs[0].data.regions[0].region_info.bounding_box
+
+    calculateFaces = ({outputs: out}) => {
+        const regions = out[0].data.regions
+        const faceBoxes = regions.map(this.calculateFaceLocations)
+
+        return faceBoxes
+    }
+
+    // We destructure the region to get the bounding_box and we rename as box
+    calculateFaceLocations = ({region_info : {bounding_box : face}}) => {
+
         const image = document.getElementById('input-image')
         const width = Number(image.width)
         const height = Number(image.height)
 
 
         return {
-            leftCol: clarifaiFace.left_col * width,
-            rightCol: width - (clarifaiFace.right_col * width),
-            topRow: clarifaiFace.top_row * height,
-            bottomRow: height - (clarifaiFace.bottom_row * height)
+            leftCol: face.left_col * width,
+            rightCol: width - (face.right_col * width),
+            topRow: face.top_row * height,
+            bottomRow: height - (face.bottom_row * height)
         }
     }
 
-    displayFaceBox = async (box) => {
-        await this.setState({box : box})
-        console.log(this.state.box)
+    displayFaceBox = async (boxes) => {
+        await this.setState({boxes : boxes})
+        //console.log(this.state.box)
     }
 
     onSubmitted = async (event) => {
@@ -55,13 +63,13 @@ constructor(props) {
 
         app.models
           .predict(FACE_DETECT_MODEL, imageUrl)
-          .then(this.calculateFaceLocation)     // the response is passed as a parameter
+          .then(this.calculateFaces)            // the response is passed as a parameter
           .then(this.displayFaceBox)            // the calculated face location is passed as a parameter
           .catch(console.log)                   // the error is passed as a paremeter
 
     }
     render(){
-          const {imageUrl, box } = this.state
+          const {imageUrl, boxes } = this.state
       return (
         <div className="App">
           <Particles id="tsparticles" options={ParticlesConfig} />
@@ -69,7 +77,7 @@ constructor(props) {
             <Logo />
             <Rank />
             <ImageLinkForm submitted={this.onSubmitted}/>
-            <FaceRecognition box={ box } imageUrl = { imageUrl } />
+            <FaceRecognition boxes={ boxes } imageUrl = { imageUrl } />
         </div>
           
       );
