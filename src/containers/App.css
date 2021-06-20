@@ -1,3 +1,8 @@
+.development {
+    font-style: italic;
+    color: white;
+    padding-top: .9em;
+}
 .App {
   text-align: center;
 }
@@ -11,7 +16,7 @@
     z-index: 0;
 }
 
-#image-link-form, #navigation, #face-box, #signup-form, #signin-form {
+#image-link-form, #navigation, #face-box, #signup-form, #signin-form, #under-development {
     position: relative;
     z-index: 1000000;
 }

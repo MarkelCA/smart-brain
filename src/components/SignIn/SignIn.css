@@ -1,5 +1,6 @@
 #signin-form {
-    transform: translate(0, 25%);
+    transform: translate(0, 15%);
+    width: fit-content;
 }
 input {
     background-color: white;

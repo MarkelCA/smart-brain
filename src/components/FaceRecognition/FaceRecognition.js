@@ -1,14 +1,11 @@
-import React, { Component } from 'react'
 import './FaceRecognition.css'
-class FaceRecognition extends Component {
-    render() {
-        const { boxes } = this.props
 
-    const { imageUrl } = this.props
+const FaceRecognition = ({boxes, imageUrl}) => {
+
     let key = 1
         console.log(boxes)
         return (
-            <div id='face-box' className='flex justify-center w-1/2 h-auto m-auto my-4'>
+            <div id='face-box' className='flex justify-center sm:w-full md:w-1/2 h-auto m-auto my-4'>
                 
                     <img id='input-image' src={imageUrl}  className='w-full' />
                
@@ -22,7 +19,6 @@ class FaceRecognition extends Component {
             </div>
         )
 
-    }
 }
 
 export default FaceRecognition

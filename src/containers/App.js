@@ -85,11 +85,21 @@ constructor(props) {
     }
 
     render(){
+        const underDevelopment = <p id='under-development' className='development'>🔧 Site currently under development 🔧</p>
         const {imageUrl, boxes } = this.state
-        const signInCode = <SignIn onSubmit={this.signIn} onRegister={this.register} />
-        const signUpCode = <SignUp onSubmit={this.signIn} onLogin={this.signOut}/>
+        const signInCode = <React.Fragment>
+                                {underDevelopment}
+                                <SignIn onSubmit={this.signIn} onRegister={this.register} />
+                            </React.Fragment>
+
+        const signUpCode = <React.Fragment>
+                                {underDevelopment}
+                                <SignUp onSubmit={this.signIn} onLogin={this.signOut}/>
+                            </React.Fragment>
+
         const homeCode = <React.Fragment>
                             <Navigation onSignOut={this.signOut}/>  
+                                {underDevelopment}
                             <Logo />
                             <Rank />
                             <ImageLinkForm submitted={this.onSubmitted}/>
