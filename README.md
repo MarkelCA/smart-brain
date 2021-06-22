@@ -9,6 +9,10 @@ I'm using:
 
 - [x] Interactive background: Click on the background to see what it does!
 
+*Coming soon:*
+- [ ] Node & Express Backend server to manage the users.
+- [ ] MongoDB database to store the user's info.
+
 ### Page deployed!
 A teaser is deployed [here](https://markelca.github.io/smart-brain/), the **accout authentification features are not working** and **more AI modes will be added** too.
 
