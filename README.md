@@ -1,8 +1,8 @@
 # SmartBrain
 
-Face Recognition App made with React.
-
+Face Recognition App made with MERN stack.
 I'm using:
+- [MERN stack](https://www.mongodb.com/mern-stack): MongoDB, Express, React, Node.
 - [Tailwind](https://tailwindcss.com/): As CSS Framework for the styles and responsiveness.
 - [react-tilty](https://www.npmjs.com/package/react-tilty): For the tiling [animation](https://codesandbox.io/s/73rqoq599j?fontsize=14&file=/src/index.js:0-27) on the logo
 - [particles.js](https://www.npmjs.com/package/react-tsparticles): For the background [animations](https://vincentgarreau.com/particles.js/) and interactivity.
