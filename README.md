@@ -1,6 +1,7 @@
 # SmartBrain
 
 Face Recognition App made with MERN stack.
+
 I'm using:
 - [MERN stack](https://www.mongodb.com/mern-stack): MongoDB, Express, React, Node.
 - [Tailwind](https://tailwindcss.com/): As CSS Framework for the styles and responsiveness.
