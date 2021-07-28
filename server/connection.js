@@ -1,25 +1,31 @@
-// getting-started.js
-
+/**
+ * Database connection
+ * Created by Markel Cuesta
+ * Date: 28/07/2021 - 22:13
+ */
 
 import mongoose from 'mongoose'
-import path from 'path'
-import User from './model/User.js'
-///import User from './model/User'
-
 import dotenv from 'dotenv'
-import dotenvExpand from 'dotenv-expand'
+import  Model  from './model/model.js'
 
-const config = dotenv.config()
-//dotenv.config({ path : path.resolve(import.meta.url, '../../.env')})
-console.log(process.env)
+// Pick the configuration from the .env file
+dotenv.config()
 
-dotenvExpand(config)
+let url = ''
 
+if(process.env.FULL_DB_URL)
+    url = processs.env.FULL_DB_URL
+else {
+    const { USER, PASSWORD, DB_NAME, DB_HOST } = process.env
+    url = `mongodb+srv://${USER}:${PASSWORD}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`
+}
 
-mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
+
 db.once('open', function() {
     console.log('connected')
+        Model.loadModel()
 });
