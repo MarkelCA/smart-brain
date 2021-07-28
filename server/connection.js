@@ -1,23 +1,18 @@
 // getting-started.js
-const mongoose = require('mongoose')
-const path = require('path')
-const User = require('./model/User')
-const dotenv = require('dotenv')
-const dotenvExpand = require('dotenv-expand')
 
 
+import mongoose from 'mongoose'
+import path from 'path'
+import User from './model/User.js'
+///import User from './model/User'
 
-//import mongoose from 'mongoose'
-//import path from 'path'
-//import User from './model/User.js'
-/////import User from './model/User'
+import dotenv from 'dotenv'
+import dotenvExpand from 'dotenv-expand'
 
-//import dotenv from 'dotenv'
-//import dotenvExpand from 'dotenv-expand'
-
-const config = dotenv.config({ path : path.resolve(__dirname, '../../.env')})
+const config = dotenv.config()
 //dotenv.config({ path : path.resolve(import.meta.url, '../../.env')})
-console.log(User)
+console.log(process.env)
+
 dotenvExpand(config)
 
 
