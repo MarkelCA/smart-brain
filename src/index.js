@@ -4,6 +4,9 @@ import './index.css';
 import App from './containers/App';
 import reportWebVitals from './reportWebVitals';
 
+const path = require('path');
+global.appRoot = path.resolve(__dirname + '../');
+console.log(global.appRoot)
 ReactDOM.render(
   <React.StrictMode>
     <App />

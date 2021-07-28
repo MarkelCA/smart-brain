@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "nodemon" : "nodemon server/server.js",
+    "nodemon": "nodemon server/server.js",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
@@ -51,6 +51,8 @@
   },
   "devDependencies": {
     "autoprefixer": "^9.8.6",
+    "dotenv": "^10.0.0",
+    "dotenv-expand": "^5.1.0",
     "nodemon": "^2.0.12",
     "postcss": "^7.0.36",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.0"
