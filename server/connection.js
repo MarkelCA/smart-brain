@@ -6,7 +6,7 @@
 
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
-import  Model  from './model/model.js'
+import  UserController from './Controller/UserController.js'
 
 // Pick the configuration from the .env file
 dotenv.config()
@@ -27,5 +27,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function() {
     console.log('connected')
-        Model.newUser('Markel', 'markel@markel.markel', 'ThisIsasecurePassword.1234')
+    const controller = new UserController()
+        controller.newUser('Markel', 'markel@markel.markel', 'ThisIsasecurePasswod.14')
 });
