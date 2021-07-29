@@ -3,18 +3,27 @@ import UserSchema from './User.js'
 
 export default class Model {
 
-    static loadModel() {
+    static newUser(username, email, password) {
 
         const User = mongoose.model('User', UserSchema)
 
-        const markel = new User({
-            username : 'MarkelCA',
-            email : 'markel@gmail.com',
-            password : '1234'
+        const newuser = new User({
+            username : username ,
+            email    : email,
+            password : password 
         })
         
-        console.log('a')
-        markel.save()
+        newuser.save(function(err, doc) {
+            if(err) {
+                let message = 'Error: \n'
+                for (var errName in err.errors) 
+                    message += '  - ' +err.errors[errName].message + '\n'
+
+                return console.log(message)
+            }
+            
+            console.log('User inserted:\n', doc)
+        })
     }
 }
 

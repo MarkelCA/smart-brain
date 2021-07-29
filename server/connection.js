@@ -27,5 +27,5 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function() {
     console.log('connected')
-        Model.loadModel()
+        Model.newUser('Markel', 'markel@markel.markel', 'ThisIsasecurePassword.1234')
 });
