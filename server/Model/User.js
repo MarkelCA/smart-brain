@@ -6,14 +6,18 @@ const UserSchema = new Schema({
     username : {
         type : String,
         required : true,
-            //message : 'Username must have more than 3 characters.'
     },
-    email   : String,
-    password: {
+    email : {
         type : String,
-            //message : "The password must be 8 characters or longer and must contain at least 1 lowercase, one uppercase, one number and one special character"
-    }
+        required : true,
+    },
+    password:{
+        type : String,
+        required : true,
+    },
+    
  });
 
+const UserModel = mongoose.model('User', UserSchema)
 
-export default UserSchema
+export { UserSchema, UserModel } 

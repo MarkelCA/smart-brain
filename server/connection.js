@@ -7,6 +7,7 @@
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import  UserController from './Controller/UserController.js'
+import  { UserModel} from './Model/User.js'
 
 // Pick the configuration from the .env file
 dotenv.config()
@@ -25,8 +26,11 @@ mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
-db.once('open', function() {
+db.once('open', async function() {
     console.log('connected')
     const controller = new UserController()
-        controller.newUser('Markel', 'markel@markel.markel', 'ThisIsasecurePasswod.14')
+    controller.newUser('MarkelValidUser', 'markel@bikuma.com', 'UnaPassMasSegura.666')
+
+    //const markelDoc = await controller.getUser('gorasiberia')
+    //console.log(markelDoc)
 });

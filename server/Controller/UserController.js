@@ -1,28 +1,32 @@
-import mongoose from 'mongoose'
-import  UserSchema from '../Model/User.js'
+//import mongoose from 'mongoose'
+import  { UserModel} from '../Model/User.js'
 
 export default class UserController {
 
     user = {}
 
+    getUser = async (username) => {
+        const user = await UserModel.find({ username : username}).exec()
+        return user
+    }
+
     newUser(username, email, password) {
 
-        const User = mongoose.model('User', UserSchema)
 
-        const newuser = new User({
+        const newuser = new UserModel({
             username : username ,
             email    : email,
             password : password 
         })
 
         this.user = newuser
-
         this.user.save((err, doc) => {
 
             try {
-                this.validateUser(this.user)
+                this.validateUserSchema()
+                this.validateUserFields()
 
-                console.log('User inserted:\n', doc)
+                console.log("User '" + doc.username + "' successfully inserted.\n", )
                 return true;
             }
             catch(e) {
@@ -34,32 +38,77 @@ export default class UserController {
         })
     }
 
-    validateUser = (user) => {
-        const validPass = this.validatePassword(user)
-        const validUser = this.validateUsername(user)
+    validateUserSchema = () => {
+        const userErrors = this.user.validateSync() || null
+
+        if(userErrors) {
+        let message = 'Error inserting user:'
+            for(const field in userErrors.errors) 
+                message += '\n   - ' + userErrors.errors[field].message
+
+            //console.log(userErrors.errors)
+            throw Error(message)
+        }
+
+    }
+    validateUserFields = () => {
+        const validPass = this.validatePassword(this.user)
+        const validUser = this.validateUsername(this.user)
 
         let message = 'Error:\n'
-
-        if(validPass && validUser)
+        if(validPass.valid && validUser.valid)
             return true;
+
         else {
-            if(!validPass) message+= '  - Password not valid\n'
-            if(!validUser) message+= '  - User not valid\n'
+            if(!validPass.valid) message+= validPass.message
+            if(!validUser.valid) message+= validUser.message
 
             throw Error(message)
         }
 
     }
+
+    /*
+     * Strong password Regex
+     * 
+     * ^	            The password string will start this way
+     * (?=.*[a-z])	    The string must contain at least 1 lowercase alphabetical character
+     * (?=.*[A-Z])	    The string must contain at least 1 uppercase alphabetical character
+     * (?=.*[0-9])	    The string must contain at least 1 numeric character
+     * (?=.*[!@#$%^&*])	The string must contain at least one special character, but we are escaping reserved RegEx characters to avoid conflict
+     * (?=.{8,})	    The string must be eight characters or longer
+     */
     validatePassword = ({ password }) => {
         const strongPass = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-.!@#\$%\^&\*])(?=.{8,})");
 
-        return password.match(strongPass)
+        return {
+            valid    : password.match(strongPass),
+            message  : '  - Password must cointain at least 8 characters, a number, an uppercase and lowercase letter and a special character.\n'
+        }
     }
 
+    /*
+     * Valid Username Regex
+     *        
+     *  ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
+     *   └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
+     *         │         │         │            │           no _ or . at the end
+     *         │         │         │            │
+     *         │         │         │            allowed characters
+     *         │         │         │
+     *         │         │         no __ or _. or ._ or .. inside
+     *         │         │
+     *         │         no _ or . at the beginning
+     *         │
+     *         username is 8-20 characters long
+     */
     validateUsername = ({ username }) => {
-        const validUsername = username.length > 3
+        const validUser = new RegExp("^(?=.{8,20}$)[a-zA-Z0-9._]+(?<![_.])$");
+        return {
+            valid    : username.match(validUser),
+            message  : '  - The user must contain between 8 and 20 characters.\n'
+        }
 
-        return validUsername
     }
 
 }
