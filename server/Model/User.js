@@ -1,6 +1,6 @@
-//Test Schema
 import mongoose from 'mongoose'
 const { Schema } = mongoose;
+
 
 const UserSchema = new Schema({
     username : {
@@ -15,9 +15,10 @@ const UserSchema = new Schema({
         type : String,
         required : true,
     },
-    
- });
 
-const UserModel = mongoose.model('User', UserSchema)
+});
 
-export { UserSchema, UserModel } 
+
+
+const User = mongoose.model('User', UserSchema)
+export default User

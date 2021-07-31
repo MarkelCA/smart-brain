@@ -1,19 +1,21 @@
 //import mongoose from 'mongoose'
-import  { UserModel} from '../Model/User.js'
+import  Model from '../Model/model.js'
+const User = new Model().getUser()
 
 export default class UserController {
 
     user = {}
 
     getUser = async (username) => {
-        const user = await UserModel.find({ username : username}).exec()
+        const user = await User.find({ username : username}
+            ).exec()
         return user
     }
 
-    newUser(username, email, password) {
+    newUser = (username, email, password) => {
 
 
-        const newuser = new UserModel({
+        const newuser = new User({
             username : username ,
             email    : email,
             password : password 

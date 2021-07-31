@@ -1,7 +1,13 @@
 import mongoose from 'mongoose'
-import UserSchema from './User.js'
+import User from './User.js'
 
-export default class Model {
+class Model {
+
+    getUser() {
+        return User
+    }
 
 }
 
+
+export default Model
