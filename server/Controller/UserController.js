@@ -12,7 +12,7 @@ export default class UserController {
         return user
     }
 
-    newUser = (username, email, password) => {
+    newUser = async (username, email, password) => {
 
 
         const newuser = new User({
@@ -22,16 +22,16 @@ export default class UserController {
         })
 
         this.user = newuser
-        this.user.save((err, doc) => {
-
+        await this.user.save( async (err, doc) => {
             try {
                 this.validateUserSchema()
-                this.validateUserFields()
+                await this.validateUserFields()
 
                 console.log("User '" + doc.username + "' successfully inserted.\n", )
                 return true;
             }
             catch(e) {
+                //console.log('catchhhhh')
                 console.log(e.message)
                 return false;
             }
@@ -53,15 +53,17 @@ export default class UserController {
         }
 
     }
-    validateUserFields = () => {
-        const validPass = this.validatePassword(this.user)
-        const validUser = this.validateUsername(this.user)
+    validateUserFields = async () => {
 
-        let message = 'Error:\n'
-        if(validPass.valid && validUser.valid)
+        const validPass = this.validatePassword(this.user)
+        const validUser = await this.validateUsername(this.user)
+
+        if(validPass.valid && validUser.valid) {
             return true;
+        }
 
         else {
+            let message = 'Error:\n'
             if(!validPass.valid) message+= validPass.message
             if(!validUser.valid) message+= validUser.message
 
@@ -104,13 +106,31 @@ export default class UserController {
      *         │
      *         username is 8-20 characters long
      */
-    validateUsername = ({ username }) => {
+    validateUsername = async ({ username }) => {
         const validUser = new RegExp("^(?=.{8,20}$)[a-zA-Z0-9._]+(?<![_.])$");
-        return {
-            valid    : username.match(validUser),
-            message  : '  - The user must contain between 8 and 20 characters.\n'
-        }
 
+        const identicNames = await this.validateUniqueUser(username)
+
+        console.log(identicNames)
+
+       if(identicNames) 
+            return {
+                valid    : false,
+                message  : '  - The username is already in use.\n'
+            }
+
+        else if(!validUser)
+            return {
+                valid    : false,
+                message  : '  - The user must contain between 8 and 20 characters.\n'
+            }
+
+        else
+            return { valid : true }
+
+    }
+    validateUniqueUser = async (username) => {
+        return await User.countDocuments({ username : username })
     }
 
 }

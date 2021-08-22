@@ -7,9 +7,8 @@
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import  Controller from './Controller/Controller.js'
-import  Model from './Model/model.js'
 
-const User = new Model().getUser()
+//const User = new Model().getUser()
 // Pick the configuration from the .env file
 dotenv.config()
 
@@ -31,8 +30,8 @@ db.once('open', async function() {
     console.log('connected')
 
     const userController = new Controller().getUserController()
-    console.log(userController)
-    new userController().newUser('MarkelCuesta', 'markel@bikuma.com', 'UnaPassMasSegura.666')
+    //console.log(userController)
+    await new userController().newUser('MarkelCuesta', 'markel@bikuma.com', 'UnaPassMasSegura.666')
 
     //
     //const markelDoc = await controller.getUser('gorasiberia')
