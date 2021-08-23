@@ -8,6 +8,12 @@ const UserSchema = new Schema({
     username : {
         type : String,
         required : true,
+        validate: {
+            validator: async function(username) {
+                return !(await User.countDocuments({ username : username }))
+            },
+            message : "This username is already in use."
+        }
     },
     email : {
         type : String,
@@ -20,21 +26,6 @@ const UserSchema = new Schema({
 
 });
 
-//UserSchema.pre('save', async (err, doc) => {
-    //try {
-        //UserController.validateUserSchema()
-        //await UserController.validateUserFields()
-
-        //console.log("User '" + doc.username + "' successfully inserted.\n", )
-        //return true;
-    //}
-    //catch(e) {
-        ////console.log('catchhhhh')
-        //console.log(e.message)
-        //return false;
-    //}
-
-//})
 
 const User = mongoose.model('User', UserSchema)
 export default User

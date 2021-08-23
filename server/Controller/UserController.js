@@ -23,6 +23,11 @@ export default class UserController {
 
         this.user = newuser
         await this.user.save( async (err, doc) => {
+
+            if(err){
+                console.log('Error:\n -', err.errors.username.message)
+                return false
+            }
             try {
                 this.validateUserSchema()
                 await this.validateUserFields()
@@ -31,7 +36,7 @@ export default class UserController {
                 return true;
             }
             catch(e) {
-                //console.log('catchhhhh')
+                console.log('catchhhhh')
                 console.log(e.message)
                 return false;
             }
@@ -109,28 +114,11 @@ export default class UserController {
     validateUsername = async ({ username }) => {
         const validUser = new RegExp("^(?=.{8,20}$)[a-zA-Z0-9._]+(?<![_.])$");
 
-        const identicNames = await this.validateUniqueUser(username)
-
-        console.log(identicNames)
-
-       if(identicNames) 
             return {
-                valid    : false,
-                message  : '  - The username is already in use.\n'
-            }
-
-        else if(!validUser)
-            return {
-                valid    : false,
+                valid    : username.match(validUser),
                 message  : '  - The user must contain between 8 and 20 characters.\n'
             }
 
-        else
-            return { valid : true }
-
-    }
-    validateUniqueUser = async (username) => {
-        return await User.countDocuments({ username : username })
     }
 
 }

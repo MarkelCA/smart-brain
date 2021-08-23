@@ -30,8 +30,8 @@ db.once('open', async function() {
     console.log('connected')
 
     const userController = new Controller().getUserController()
-    //console.log(userController)
-    await new userController().newUser('MarkelCuesta', 'markel@bikuma.com', 'UnaPassMasSegura.666')
+
+    await new userController().newUser('ValidUserr', 'markel@bikuma.com', 'UnaPassMasSegura.666')
 
     //
     //const markelDoc = await controller.getUser('gorasiberia')
