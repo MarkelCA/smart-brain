@@ -71,9 +71,8 @@ constructor(props) {
           .catch(console.log)                   // the error is passed as a paremeter
 
     }
-    signIn = (e) => {
-        e.preventDefault()
-        this.setState({route: 'home'})
+    signIn = (route) => {
+        this.setState({route: route})
     }
     signOut = (e) => {
         e.preventDefault()
@@ -83,23 +82,17 @@ constructor(props) {
         e.preventDefault()
         this.setState({route: 'register'})
     }
+    sayHi = (e) => {
+        alert('hi')
+    }
 
     render(){
-        const underDevelopment = <p id='under-development' className='development'>🔧 Site currently under development 🔧</p>
         const {imageUrl, boxes } = this.state
-        const signInCode = <React.Fragment>
-                                {underDevelopment}
-                                <SignIn onSubmit={this.signIn} onRegister={this.register} />
-                            </React.Fragment>
+        const signInCode = <SignIn onRouteChange={this.signIn} onRegister={this.register} /> 
 
-        const signUpCode = <React.Fragment>
-                                {underDevelopment}
-                                <SignUp onSubmit={this.signIn} onLogin={this.signOut}/>
-                            </React.Fragment>
-
+        const signUpCode = <SignUp onSubmit={this.signIn} onLogin={this.signOut}/>
         const homeCode = <React.Fragment>
                             <Navigation onSignOut={this.signOut}/>  
-                                {underDevelopment}
                             <Logo />
                             <Rank />
                             <ImageLinkForm submitted={this.onSubmitted}/>
