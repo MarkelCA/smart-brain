@@ -1,3 +1,7 @@
+.passwordsDontMatch {
+    margin-top: .8em;
+    color: red;
+}
 #signin-form {
     transform: translate(0, 15%);
     width: fit-content;

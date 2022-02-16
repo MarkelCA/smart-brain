@@ -22,9 +22,21 @@ constructor(props) {
     this.state = {
         imageUrl : '',
         boxes: [],
-        route: 'signin'
+        route: 'signin',
+        user : {
+            id       : '',
+            email    : "",
+            name     : '',
+            entries  : 0,
+            joined   : ''
+
+        }
     }
   }
+
+    loadUser = (user) => {
+        this.state.user = user
+    }
 
     calculateFaces = ({outputs: out}) => {
         const regions = out[0].data.regions
@@ -51,7 +63,6 @@ constructor(props) {
 
     displayFaceBox = async (boxes) => {
         await this.setState({boxes : boxes})
-        //console.log(this.state.box)
     }
 
     onSubmitted = async (event) => {
@@ -71,12 +82,8 @@ constructor(props) {
           .catch(console.log)                   // the error is passed as a paremeter
 
     }
-    signIn = (route) => {
+    changeRoute = (route) => {
         this.setState({route: route})
-    }
-    signOut = (e) => {
-        e.preventDefault()
-        this.setState({route: 'signin'})
     }
     register = (e) => {
         e.preventDefault()
@@ -86,19 +93,23 @@ constructor(props) {
         alert('hi')
     }
 
-    render(){
-        const {imageUrl, boxes } = this.state
-        const signInCode = <SignIn onRouteChange={this.signIn} onRegister={this.register} /> 
+    onSignOut = () => {
+        this.changeRoute('signin')
+    }
 
-        const signUpCode = <SignUp onSubmit={this.signIn} onLogin={this.signOut}/>
+    render(){
+        const {route, imageUrl, boxes } = this.state
+
+        const signInCode = <SignIn loadUser={this.loadUser} onRouteChange={this.changeRoute} onRegister={this.register} /> 
+        const signUpCode = <SignUp  onRouteChange={this.changeRoute}/>
         const homeCode = <React.Fragment>
-                            <Navigation onSignOut={this.signOut}/>  
+                            <Navigation onSignOut={this.onSignOut}/>  
                             <Logo />
                             <Rank />
                             <ImageLinkForm submitted={this.onSubmitted}/>
                             <FaceRecognition boxes={ boxes } imageUrl = { imageUrl } />
                         </React.Fragment>
-        const { route } = this.state
+
       return (
         <div className="App">
           <Particles id="tsparticles" options={ParticlesConfig} />
