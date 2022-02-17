@@ -1,7 +1,8 @@
 import './SignUp.css'
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import Utils from '../../utils/Utils'
 import React, {useState, useEffect} from 'react'
-const SignUp = ({ onRouteChange }) => {
+const SignUp = () => {
     const [ email, setEmail ] = useState('')
     const [ name, setName ] = useState('')
     const [ password, setPassword ] = useState('')
@@ -9,7 +10,7 @@ const SignUp = ({ onRouteChange }) => {
     const [ passwordMatch, setPasswordMatch] = useState(true)
     const [ strongPassword, setStrongPassword ] = useState(false)
     const [ emptyFields, setEmptyFields ] = useState(false)
-
+    const navigate = useNavigate();
     useEffect(() => {
         const regex = /^.*(?=.{12,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$/
         setStrongPassword(password.match(regex))
@@ -19,11 +20,6 @@ const SignUp = ({ onRouteChange }) => {
     useEffect(() => {
         setEmptyFields(!email || !name || !repeatPassword || !password)
     }, [email, name, repeatPassword, password])
-
-    const onLogin = (e) => {
-        e.preventDefault()
-        onRouteChange('signin')
-    }
 
     const onSubmitSignIn = async (e) => {
         e.preventDefault()
@@ -42,7 +38,7 @@ const SignUp = ({ onRouteChange }) => {
         })
 
           if(user) {
-              onRouteChange('signin')
+              navigate('/', {replace : true})
           }
     }
 
@@ -93,9 +89,9 @@ const SignUp = ({ onRouteChange }) => {
 
                         <div className="text-grey-dark mt-6 bg-white px-2 py-5 rounded-lg shadow-md text-black w-full">
                             Already have an account? 
-                            <a className="text-lg no-underline border-b text-blue-700 transition duration-200 hover:border-blue-700 text-blue ml-2" href="../login/" onClick={onLogin}>
-                                Log in
-                            </a>.
+                            <span className="text-lg no-underline border-b text-blue-700 transition duration-200 hover:border-blue-700 text-blue ml-2">
+                                <Link to="/">Log in</Link>
+                            </span>.
                         </div>
                     </div>
                 </form>

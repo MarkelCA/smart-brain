@@ -1,16 +1,14 @@
 import './App.css';
 import React, { Component, useState } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Clarifai, {FACE_DETECT_MODEL} from 'clarifai';
-import Navigation from '../components/Navigation/Navigation'
-import Logo from '../components/Logo/Logo'
-import ImageLinkForm from '../components/ImageLinkForm/ImageLinkForm'
-import Rank from '../components/Rank/Rank'
 import Particles from "react-tsparticles";
 import ParticlesConfig from "../particlesjs-config.json"
-import FaceRecognition from '../components/FaceRecognition/FaceRecognition'
-import SignUp from '../components/SignUp/SignUp'
-import SignIn from '../components/SignIn/SignIn'
-//import Credits from './components/Credits/Credits'
+
+// Pages
+import Home from '../pages/home/Home';
+import SignUp from '../pages/SignUp/SignUp'
+import SignIn from '../pages/SignIn/SignIn'
 
 const app = new Clarifai.App({
     apiKey: "49a9260111a945d48126bac0a1d2cd3c",
@@ -19,7 +17,6 @@ const app = new Clarifai.App({
 const App = () => {
     const [ imageUrl, setImageUrl ] = useState('')
     const [ boxes, setBoxes ] = useState([])
-    const [ route, setRoute ] = useState('signin')
     const [ user, setUser ] = useState({
         id      : '',
         email   : '',
@@ -49,32 +46,19 @@ const App = () => {
 
     }
 
-    const signInCode = <SignIn setUser={setUser} onRouteChange={setRoute} /> 
-        const signUpCode = <SignUp onRouteChange={setRoute}/>
-        const homeCode = <>
-                        <Navigation onRouteChange={setRoute}/>  
-                        <Logo />
-                        <Rank />
-                        <ImageLinkForm submitted={onSubmitted}/>
-                        <FaceRecognition boxes={ boxes } imageUrl = { imageUrl } />
-                    </>
-
   return (
     <div className="App">
       <Particles id="tsparticles" options={ParticlesConfig} />
         {
-            /*
-             * if (signin) signInCode
-             * else if (register) SignUpCode
-             * else homeCode
-             */
-            route === 'signin' ?  signInCode : 
-                (
-                    route === 'register' ? signUpCode  : homeCode
-                )
+          <BrowserRouter>
+              <Routes>
+                  <Route path="/" element={<SignIn setUser={setUser} />} />
+                  <Route path="/register" element={<SignUp />} />
+                  <Route path="/home" element={<Home submitted={onSubmitted} boxes={boxes} imageUrl={imageUrl}/>} />
+              </Routes>
+          </BrowserRouter>
         }
     </div>
-      
   );
 
 }

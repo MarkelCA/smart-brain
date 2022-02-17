@@ -1,13 +1,16 @@
 import './SignIn.css'
+import { Outlet, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Utils from '../../utils/Utils'
 import useFetchPost from '../../hooks/useFetchPost'
 import React, {useState} from 'react'
 
-const SignIn = ({ setUser, onRouteChange}) =>  {
+const SignIn = ({ setUser }) =>  {
 
     const [ signInEmail, changeEmail ] = useState('')
     const [ signInPassword, changePassword ] = useState('')
     const [ validLogin, submit ] = useState(true)
+    const navigate = useNavigate();
 
     const onSubmitSignIn = async (e) => {
         e.preventDefault()
@@ -17,18 +20,19 @@ const SignIn = ({ setUser, onRouteChange}) =>  {
             password: signInPassword
         })
 
-        submit(user == null)
+        submit(user != null)
 
         if(user) {
              delete user.password
              setUser(user)
-             onRouteChange('home')
+            console.log(user)
+             navigate('/home', {replace : true})
          } 
     }
 
     const register = (e) => {
         e.preventDefault()
-        onRouteChange('register')
+        navigate('/register', { replace : true })
     }
 
     return (
@@ -61,9 +65,10 @@ const SignIn = ({ setUser, onRouteChange}) =>  {
 
                         <div className="text-grey-dark mt-6 bg-white px-2 py-5 rounded-lg shadow-md text-black w-full">
                             You don't have an account? 
-                            <a className="text-lg no-underline border-b text-blue-700 transition duration-200 hover:border-blue-700 text-blue ml-2" href="../register/" onClick={register}>
-                                Register
-                            </a>.
+
+                            <span className="text-lg no-underline border-b text-blue-700 transition duration-200 hover:border-blue-700 text-blue ml-2"  >
+                                <Link to="/register">Register</Link>
+                            </span>.
                         </div>
                     </div>
                 </form>
