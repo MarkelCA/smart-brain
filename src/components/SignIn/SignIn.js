@@ -1,19 +1,18 @@
 import './SignIn.css'
 import Utils from '../../utils/Utils'
+import useFetchPost from '../../hooks/useFetchPost'
 import React, {useState} from 'react'
 
 const SignIn = ({onSubmit, onRegister, loadUser, onRouteChange}) =>  {
 
     const [ signInEmail, changeEmail ] = useState('')
     const [ signInPassword, changePassword ] = useState('')
-
     const [ validLogin, submit ] = useState(true)
-
 
     const onSubmitSignIn = async (e) => {
         e.preventDefault()
 
-        const user = await Utils.post('http://localhost:3000/signin', {'Content-Type' : 'application/json'}, {
+        const user = await Utils.post('http://localhost:3000/signin', {
             email   : signInEmail,
             password: signInPassword
         })
@@ -25,7 +24,6 @@ const SignIn = ({onSubmit, onRegister, loadUser, onRouteChange}) =>  {
              loadUser(user)
              onRouteChange('home')
          } 
-
     }
 
     return (
@@ -53,7 +51,7 @@ const SignIn = ({onSubmit, onRegister, loadUser, onRouteChange}) =>  {
                                 type="submit"
                                 className="w-full text-center py-3 rounded bg-blue-600 text-gray-800 hover:text-white focus:text-white hover:bg-green-dark focus:outline-none my-1"
                                 >Log in</button>
-                            { !validLogin ? (<p className='passwordsDontMatch'>Wrong email or password ❌</p>) : ''}
+                            { !validLogin ? (<p className='text-red-700 mt-4'>Wrong email or password ❌</p>) : ''}
                         </div>
 
                         <div className="text-grey-dark mt-6 bg-white px-2 py-5 rounded-lg shadow-md text-black w-full">
