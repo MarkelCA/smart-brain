@@ -6,7 +6,7 @@ import './SignIn.css'
 //Utils
 import { post } from '../../utils/Utils';
 
-const SignIn = ({ setUser }) =>  {
+const SignIn = ({ setUser, logIn }) =>  {
 
     const [ signInEmail, changeEmail ] = useState('')
     const [ signInPassword, changePassword ] = useState('')
@@ -26,6 +26,7 @@ const SignIn = ({ setUser }) =>  {
         if(user) {
              delete user.password
              setUser(user)
+             logIn(true)
              navigate('/home', {replace : true})
          } 
     }

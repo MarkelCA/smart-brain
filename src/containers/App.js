@@ -10,10 +10,12 @@ import ParticlesConfig from "../particlesjs-config.json"
 import Home from '../pages/Home/Home';
 import SignUp from '../pages/SignUp/SignUp'
 import SignIn from '../pages/SignIn/SignIn'
+import PageNotFound from '../pages/404/404';
 
 
 const App = () => {
     const [user, setUser ] = useState({})
+    const [loggedIn, logIn ] = useState(false)
 
     return (
         <div className="App">
@@ -21,9 +23,10 @@ const App = () => {
             {
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={ <SignIn setUser={setUser} /> } />
+                        <Route path="/" element={ <SignIn logIn={logIn} setUser={setUser} /> } />
                         <Route path="/register" element={ <SignUp /> } />
-                        <Route path="/home" element={ <Home user={user} setUser={setUser}/> } />
+                        <Route path="/home" element={ <Home user={user} setUser={setUser} loggedIn={loggedIn}/> } />
+                        <Route path="*" element={<PageNotFound />} />
                     </Routes>
                 </BrowserRouter>
             }

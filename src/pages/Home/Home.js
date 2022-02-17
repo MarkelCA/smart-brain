@@ -1,5 +1,6 @@
 // React
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom";
 
 //Components
 import Navigation from '../../components/Navigation/Navigation'
@@ -14,14 +15,22 @@ import app from '../../api/api'
 // Utils
 import { put } from '../../utils/Utils'
 
-const Home = ({ user, setUser }) => {
+const Home = ({ user, setUser, loggedIn }) => {
     const [ imageUrl, setImageUrl ] = useState('')
     const [ boxes, setBoxes ] = useState([])
     const [entries, setEntries ] = useState(user.entries)
     const [ visible, setVisible ] = useState(false)
+    const navigate = useNavigate();
+
+    
+    useEffect(() => {
+        if(!loggedIn) navigate('/', {replace : true})
+    }, [loggedIn, navigate])
+
     const displayFaceBox = async (boxes) => {
         setBoxes(boxes)
     }
+
 
     const submitted = async (event) => {
         event.preventDefault()
@@ -34,13 +43,17 @@ const Home = ({ user, setUser }) => {
         app.models
           .predict(FACE_DETECT_MODEL, imageUrl)
           .then(calculateFaces)            // the response is passed as a parameter
-          .then(displayFaceBox)            // the calculated face location is passed as a parameter
+            .then(async (boxes) => {
+                displayFaceBox(boxes)
+                // Show only if the submit of the image was successfull 
+                const userResult = await put('http://localhost:3000/image', {id : user.id })
+                console.log(userResult)
+                setUser(userResult)
+                let entriesResult = userResult.entries
+                setEntries(entriesResult += 1)
+            })            // the calculated face location is passed as a parameter
           .catch(console.log)                   // the error is passed as a paremeter
 
-        const userResult = await put('http://localhost:3000/image', {id : user.id })
-        setUser(userResult)
-        let entriesResult = userResult.entries
-        setEntries(entriesResult += 1)
 
     }
     return (
