@@ -13,13 +13,7 @@ import SignIn from '../pages/SignIn/SignIn'
 
 
 const App = () => {
-    const [user, setUser ] = useState({
-        id      : '',
-        email   : '',
-        name    : '',
-        entries : '',
-        joined  : ''
-    })
+    const [user, setUser ] = useState({})
 
     return (
         <div className="App">
@@ -29,7 +23,7 @@ const App = () => {
                     <Routes>
                         <Route path="/" element={ <SignIn setUser={setUser} /> } />
                         <Route path="/register" element={ <SignUp /> } />
-                        <Route path="/home" element={ <Home/> } />
+                        <Route path="/home" element={ <Home user={user} setUser={setUser}/> } />
                     </Routes>
                 </BrowserRouter>
             }

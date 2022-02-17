@@ -1,5 +1,5 @@
 // React
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {useState} from 'react'
 // Styles
 import './SignIn.css'
@@ -26,14 +26,8 @@ const SignIn = ({ setUser }) =>  {
         if(user) {
              delete user.password
              setUser(user)
-            console.log(user)
              navigate('/home', {replace : true})
          } 
-    }
-
-    const register = (e) => {
-        e.preventDefault()
-        navigate('/register', { replace : true })
     }
 
     return (

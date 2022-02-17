@@ -1,6 +1,6 @@
 // React
 import {useState, useEffect} from 'react'
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // Styles
 import './SignUp.css'
 // Utils

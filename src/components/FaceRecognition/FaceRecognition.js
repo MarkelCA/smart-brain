@@ -1,12 +1,11 @@
 import './FaceRecognition.css'
-
-const FaceRecognition = ({boxes, imageUrl}) => {
+const FaceRecognition = ({boxes, imageUrl, visible}) => {
 
     let key = 1
         return (
             <div id='face-box' className='flex justify-center sm:w-full md:w-1/2 h-auto m-auto my-4'>
                 
-                    <img id='input-image' src={imageUrl}  className='w-full' />
+                 <img id='input-image' src={imageUrl} alt="inserted"  className='w-full' />
                
                 {
 

@@ -9,25 +9,27 @@ import ImageLinkForm from '../../components/ImageLinkForm/ImageLinkForm'
 import FaceRecognition from '../../components/FaceRecognition/FaceRecognition'
 
 // Api
-import Clarifai, {FACE_DETECT_MODEL} from 'clarifai';
+import {FACE_DETECT_MODEL} from 'clarifai';
 import app from '../../api/api'
+// Utils
+import { put } from '../../utils/Utils'
 
-const Home = () => {
+const Home = ({ user, setUser }) => {
     const [ imageUrl, setImageUrl ] = useState('')
     const [ boxes, setBoxes ] = useState([])
-
+    const [entries, setEntries ] = useState(user.entries)
+    const [ visible, setVisible ] = useState(false)
     const displayFaceBox = async (boxes) => {
         setBoxes(boxes)
     }
 
     const submitted = async (event) => {
         event.preventDefault()
+        setVisible(true)
         const form = event.target
         const searchField_value = form.querySelector('#search-field').value
 
         setImageUrl(searchField_value)
-
-        const { FACE_DETECT_MODEL } = Clarifai
 
         app.models
           .predict(FACE_DETECT_MODEL, imageUrl)
@@ -35,14 +37,19 @@ const Home = () => {
           .then(displayFaceBox)            // the calculated face location is passed as a parameter
           .catch(console.log)                   // the error is passed as a paremeter
 
+        const userResult = await put('http://localhost:3000/image', {id : user.id })
+        setUser(userResult)
+        let entriesResult = userResult.entries
+        setEntries(entriesResult += 1)
+
     }
     return (
         <>
             <Navigation />  
             <Logo />
-            <Rank />
+            <Rank rank={entries} name={user.name}/>
             <ImageLinkForm submitted={submitted}/>
-            <FaceRecognition boxes={ boxes } imageUrl = { imageUrl } />
+            <FaceRecognition visible={visible} boxes={ boxes } imageUrl = { imageUrl } />
         </>
     )
 }
