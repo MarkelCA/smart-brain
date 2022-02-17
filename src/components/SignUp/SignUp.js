@@ -1,7 +1,7 @@
 import './SignUp.css'
 import Utils from '../../utils/Utils'
 import React, {useState, useEffect} from 'react'
-const SignUp = ({ loadUser, onRouteChange, onRegister }) => {
+const SignUp = ({ onRouteChange }) => {
     const [ email, setEmail ] = useState('')
     const [ name, setName ] = useState('')
     const [ password, setPassword ] = useState('')
@@ -16,6 +16,10 @@ const SignUp = ({ loadUser, onRouteChange, onRegister }) => {
         setPasswordMatch(password === repeatPassword)
     },[password, repeatPassword])
 
+    useEffect(() => {
+        setEmptyFields(!email || !name || !repeatPassword || !password)
+    }, [email, name, repeatPassword, password])
+
     const onLogin = (e) => {
         e.preventDefault()
         onRouteChange('signin')
@@ -23,7 +27,11 @@ const SignUp = ({ loadUser, onRouteChange, onRegister }) => {
 
     const onSubmitSignIn = async (e) => {
         e.preventDefault()
+
+
         setEmptyFields(!email || !name || !repeatPassword || !password)
+        console.log(emptyFields)
+        console.log(!email || !name || !repeatPassword || !password)
 
         if(!passwordMatch || emptyFields) return
 

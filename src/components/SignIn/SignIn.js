@@ -3,7 +3,7 @@ import Utils from '../../utils/Utils'
 import useFetchPost from '../../hooks/useFetchPost'
 import React, {useState} from 'react'
 
-const SignIn = ({onSubmit, onRegister, loadUser, onRouteChange}) =>  {
+const SignIn = ({ setUser, onRouteChange}) =>  {
 
     const [ signInEmail, changeEmail ] = useState('')
     const [ signInPassword, changePassword ] = useState('')
@@ -21,9 +21,14 @@ const SignIn = ({onSubmit, onRegister, loadUser, onRouteChange}) =>  {
 
         if(user) {
              delete user.password
-             loadUser(user)
+             setUser(user)
              onRouteChange('home')
          } 
+    }
+
+    const register = (e) => {
+        e.preventDefault()
+        onRouteChange('register')
     }
 
     return (
@@ -56,7 +61,7 @@ const SignIn = ({onSubmit, onRegister, loadUser, onRouteChange}) =>  {
 
                         <div className="text-grey-dark mt-6 bg-white px-2 py-5 rounded-lg shadow-md text-black w-full">
                             You don't have an account? 
-                            <a className="text-lg no-underline border-b text-blue-700 transition duration-200 hover:border-blue-700 text-blue ml-2" href="../login/" onClick={onRegister}>
+                            <a className="text-lg no-underline border-b text-blue-700 transition duration-200 hover:border-blue-700 text-blue ml-2" href="../register/" onClick={register}>
                                 Register
                             </a>.
                         </div>

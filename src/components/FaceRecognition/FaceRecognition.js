@@ -3,7 +3,6 @@ import './FaceRecognition.css'
 const FaceRecognition = ({boxes, imageUrl}) => {
 
     let key = 1
-        console.log(boxes)
         return (
             <div id='face-box' className='flex justify-center sm:w-full md:w-1/2 h-auto m-auto my-4'>
                 
