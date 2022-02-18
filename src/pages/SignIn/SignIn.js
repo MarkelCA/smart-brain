@@ -19,19 +19,27 @@ const SignIn = ({ setUser, logIn }) =>  {
         e.preventDefault()
 
         bcrypt.hash(signInPassword, saltRounds, async (err, hash) => {
-            const user = await post('http://localhost:3000/signin', {
+
+            const password = await post('http://localhost:3000/signin', {
                 email   : signInEmail,
                 password: hash
             })
-            console.log(signInEmail, hash)
-            submit(user)
 
-            if(user) {
-                 delete user.password
-                 setUser(user)
-                 logIn(true)
-                 navigate('/home', {replace : true})
-             } 
+            console.log(password)
+
+            bcrypt.compare(signInPassword, password, async (err, res) => {
+                console.log(res)
+
+                //submit(user)
+
+                //if(user) {
+                     //delete user.password
+                     //setUser(user)
+                     //logIn(true)
+                     //navigate('/home', {replace : true})
+                 //} 
+            });
+
         });
 
     }
