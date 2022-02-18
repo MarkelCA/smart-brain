@@ -5,7 +5,9 @@ import {useState} from 'react'
 import './SignIn.css'
 //Utils
 import { post } from '../../utils/Utils';
+import bcrypt from 'bcryptjs'
 
+const saltRounds = 10;
 const SignIn = ({ setUser, logIn }) =>  {
 
     const [ signInEmail, changeEmail ] = useState('')
@@ -16,19 +18,22 @@ const SignIn = ({ setUser, logIn }) =>  {
     const onSubmitSignIn = async (e) => {
         e.preventDefault()
 
-        const user = await post('http://localhost:3000/signin', {
-            email   : signInEmail,
-            password: signInPassword
-        })
+        bcrypt.hash(signInPassword, saltRounds, async (err, hash) => {
+            const user = await post('http://localhost:3000/signin', {
+                email   : signInEmail,
+                password: hash
+            })
+            console.log(signInEmail, hash)
+            submit(user)
 
-        submit(user != null)
+            if(user) {
+                 delete user.password
+                 setUser(user)
+                 logIn(true)
+                 navigate('/home', {replace : true})
+             } 
+        });
 
-        if(user) {
-             delete user.password
-             setUser(user)
-             logIn(true)
-             navigate('/home', {replace : true})
-         } 
     }
 
     return (

@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import './SignUp.css'
 // Utils
 import { post } from '../../utils/Utils';
+import bcrypt from 'bcryptjs'
+const saltRounds = 10;
 
 const SignUp = () => {
     const [ email, setEmail ] = useState('')
@@ -35,15 +37,18 @@ const SignUp = () => {
 
         if(!passwordMatch || emptyFields) return
 
-        const user = await post('http://localhost:3000/register' , {
-            email : email,
-            password : password,
-            name : name
-        })
+        bcrypt.hash(password, saltRounds, async (err, hash) => {
+            const user = await post('http://localhost:3000/register' , {
+                email : email,
+                password : hash,
+                name : name
+            })
 
-          if(user) {
-              navigate('/', {replace : true})
-          }
+            if(user) {
+               navigate('/', {replace : true})
+           }
+        });
+
     }
 
     return (
