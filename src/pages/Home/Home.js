@@ -20,8 +20,15 @@ const Home = ({ user, setUser, loggedIn }) => {
     const [ boxes, setBoxes ] = useState([])
     const [entries, setEntries ] = useState(user.entries)
     const [ visible, setVisible ] = useState(false)
+    const [rank, setRank] = useState(0)
     const navigate = useNavigate();
 
+    useEffect(async() => {
+        console.log(entries)
+        const rank = await fetch('http://localhost:3000/getRank/' + entries).then(response => response.json())
+        setRank(rank)
+        console.log(rank)
+    }, [entries])
     
     useEffect(() => {
         if(!loggedIn) navigate('/', {replace : true})
@@ -60,7 +67,7 @@ const Home = ({ user, setUser, loggedIn }) => {
         <>
             <Navigation />  
             <Logo />
-            <Rank rank={entries} name={user.name}/>
+            <Rank rank={entries} name={user.name} position={rank}/>
             <ImageLinkForm submitted={submitted}/>
             <FaceRecognition visible={visible} boxes={ boxes } imageUrl = { imageUrl } />
         </>
