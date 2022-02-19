@@ -1,3 +1,7 @@
+.error-field {
+    border-width: 2px;
+    border-color: red;
+}
 #signup-form {
     width: fit-content;
 }

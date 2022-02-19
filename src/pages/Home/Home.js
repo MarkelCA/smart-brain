@@ -46,7 +46,7 @@ const Home = ({ user, setUser, loggedIn }) => {
             .then(async (boxes) => {
                 displayFaceBox(boxes)
                 // Show only if the submit of the image was successfull 
-                const userResult = await put('http://localhost:3000/image', {id : user.id })
+                const userResult = await put('http://localhost:3000/image', {email : user.email })
                 console.log(userResult)
                 setUser(userResult)
                 let entriesResult = userResult.entries

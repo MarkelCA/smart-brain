@@ -5,25 +5,42 @@ import { Link, useNavigate } from "react-router-dom";
 import './SignUp.css'
 // Utils
 import { post } from '../../utils/Utils';
-import bcrypt from 'bcryptjs'
-const saltRounds = 10;
 
 const SignUp = () => {
     const [ email, setEmail ] = useState('')
     const [ name, setName ] = useState('')
     const [ password, setPassword ] = useState('')
-    const [ repeatPassword, setRepeatPassword ] = useState('')
+    const [ repeatPassword, setRepeatPassword ] = useState(false)
     const [ passwordMatch, setPasswordMatch] = useState(true)
     const [ strongPassword, setStrongPassword ] = useState(false)
     const [ emptyFields, setEmptyFields ] = useState(false)
+    const [ emailInUse, setEmailInUse ] = useState(false)
     const navigate = useNavigate();
 
     // Check if confirmation of password is correct
     useEffect(() => {
         const regex = /^.*(?=.{12,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$/
         setStrongPassword(password.match(regex))
-        setPasswordMatch(password === repeatPassword)
+        const theyMatch = password === repeatPassword
+        setPasswordMatch(theyMatch)
+        const repeatPasswordField = document.querySelector("input[name=confirm_password]")
+
+        if(!theyMatch)
+            repeatPasswordField.classList.add("error-field")
+        else {
+            repeatPasswordField.classList.remove('error-field')
+        }
+
     },[password, repeatPassword])
+
+    // Check if email it's repeated
+    useEffect(() => {
+        const emailField = document.querySelector("input[name=email]")
+        if(emailInUse)
+            emailField.classList.add("error-field")
+        else
+            emailField.classList.remove("error-field")
+    }, [emailInUse])
 
     // Check for null fields
     useEffect(() => {
@@ -37,17 +54,19 @@ const SignUp = () => {
 
         if(!passwordMatch || emptyFields) return
 
-        bcrypt.hash(password, saltRounds, async (err, hash) => {
-            const user = await post('http://localhost:3000/register' , {
-                email : email,
-                password : hash,
-                name : name
-            })
+        const user = await post('http://localhost:3000/register' , {
+            email : email,
+            password : password,
+            name : name
+        })
 
-            if(user) {
-               navigate('/', {replace : true})
-           }
-        });
+
+        if(user) {
+           navigate('/', {replace : true})
+       }
+        else {
+            setEmailInUse(true)
+        }
 
     }
 
@@ -93,6 +112,7 @@ const SignUp = () => {
                     { !passwordMatch ? (<p className='text-red-800 mt-4'>Passwords must be equal ❌</p>) : ''}
                     { strongPassword ? (<p className='text-green-700 mt-4'>Strong password ✔️</p>) : ''}
                     { emptyFields ? (<p className='text-red-800 mt-4'>All fields are required</p>) : ''}
+                    { emailInUse ? (<p className='text-red-800 mt-4'>This email is already in use ❌</p>) : ''}
                 </div>
                 <div className="text-grey-dark mt-6 bg-white px-2 py-5 rounded-lg shadow-md text-black w-full">
                     Already have an account? 
