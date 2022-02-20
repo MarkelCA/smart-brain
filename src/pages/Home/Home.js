@@ -22,12 +22,19 @@ const Home = ({ user, setUser, loggedIn }) => {
     const [ visible, setVisible ] = useState(false)
     const [rank, setRank] = useState(0)
     const navigate = useNavigate();
+    const [ imageVisible, setImageVisible ] = useState(false)
+
+    useEffect(() => {
+        const imgElem = document.querySelector('#input-image')
+        if(imageVisible)
+            imgElem.classList.remove('not-visible')
+        else
+            imgElem.classList.add('not-visible')
+    }, [imageVisible])
 
     useEffect(async() => {
-        console.log(entries)
         const rank = await fetch('http://localhost:3000/getRank/' + entries).then(response => response.json())
         setRank(rank)
-        console.log(rank)
     }, [entries])
     
     useEffect(() => {
@@ -54,10 +61,9 @@ const Home = ({ user, setUser, loggedIn }) => {
                 displayFaceBox(boxes)
                 // Show only if the submit of the image was successfull 
                 const userResult = await put('http://localhost:3000/image', {email : user.email })
-                console.log(userResult)
                 setUser(userResult)
-                let entriesResult = userResult.entries
-                setEntries(entriesResult += 1)
+                setEntries(userResult.entries)
+                setImageVisible(true)
             })            // the calculated face location is passed as a parameter
           .catch(console.log)                   // the error is passed as a paremeter
 
