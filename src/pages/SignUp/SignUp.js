@@ -7,14 +7,20 @@ import './SignUp.css'
 import { post } from '../../utils/Utils';
 
 const SignUp = () => {
+    // Fields data variables
     const [ email, setEmail ] = useState('')
     const [ name, setName ] = useState('')
     const [ password, setPassword ] = useState('')
-    const [ repeatPassword, setRepeatPassword ] = useState(false)
+
+    const [ repeatPassword, setRepeatPassword ] = useState('')
     const [ passwordMatch, setPasswordMatch] = useState(true)
+
+    // Validation state variables
     const [ strongPassword, setStrongPassword ] = useState(false)
     const [ emptyFields, setEmptyFields ] = useState(false)
     const [ emailInUse, setEmailInUse ] = useState(false)
+    const [ emailErr, setEmailErr] = useState(false)
+
     const navigate = useNavigate();
 
     // Check if confirmation of password is correct
@@ -40,11 +46,14 @@ const SignUp = () => {
             emailField.classList.add("error-field")
         else
             emailField.classList.remove("error-field")
-    }, [emailInUse])
+    }, [emailErr, emailInUse])
 
     // Check for null fields
     useEffect(() => {
         setEmptyFields(!email || !name || !repeatPassword || !password)
+        const emailRegex = /^\S+@\S+\.\S+$/
+        setEmailErr(email.length > 0 ? !email.match(emailRegex) : false)
+        setEmailInUse(false)
     }, [email, name, repeatPassword, password])
 
     const onSubmitSignIn = async (e) => {
@@ -52,7 +61,7 @@ const SignUp = () => {
 
         setEmptyFields(!email || !name || !repeatPassword || !password)
 
-        if(!passwordMatch || emptyFields) return
+        if(!passwordMatch || emptyFields || emailErr) return
 
         const user = await post('http://localhost:3000/register' , {
             email : email,
@@ -113,6 +122,7 @@ const SignUp = () => {
                     { strongPassword ? (<p className='text-green-700 mt-4'>Strong password ✔️</p>) : ''}
                     { emptyFields ? (<p className='text-red-800 mt-4'>All fields are required</p>) : ''}
                     { emailInUse ? (<p className='text-red-800 mt-4'>This email is already in use ❌</p>) : ''}
+                    { emailErr ? (<p className='text-red-800 mt-4'>This email is not valid ❌</p>) : ''}
                 </div>
                 <div className="text-grey-dark mt-6 bg-white px-2 py-5 rounded-lg shadow-md text-black w-full">
                     Already have an account? 

@@ -19,7 +19,6 @@ const Home = ({ user, setUser, loggedIn }) => {
     const [ imageUrl, setImageUrl ] = useState('')
     const [ boxes, setBoxes ] = useState([])
     const [entries, setEntries ] = useState(user.entries)
-    const [ visible, setVisible ] = useState(false)
     const [rank, setRank] = useState(0)
     const navigate = useNavigate();
     const [ imageVisible, setImageVisible ] = useState(false)
@@ -32,9 +31,12 @@ const Home = ({ user, setUser, loggedIn }) => {
             imgElem.classList.add('not-visible')
     }, [imageVisible])
 
-    useEffect(async() => {
-        const rank = await fetch('http://localhost:3000/getRank/' + entries).then(response => response.json())
-        setRank(rank)
+    useEffect(() => {
+        // We create a anonymous function to fetch the data
+        (async() => {
+            const rank = await fetch('http://localhost:3000/getRank/' + entries).then(response => response.json())
+            setRank(rank)
+        })()
     }, [entries])
     
     useEffect(() => {
@@ -48,17 +50,16 @@ const Home = ({ user, setUser, loggedIn }) => {
 
     const submitted = async (event) => {
         event.preventDefault()
-        setVisible(true)
         const form = event.target
         const searchField_value = form.querySelector('#search-field').value
 
         setImageUrl(searchField_value)
 
         app.models
-          .predict(FACE_DETECT_MODEL, imageUrl)
+          .predict(FACE_DETECT_MODEL, searchField_value)
           .then(calculateFaces)            // the response is passed as a parameter
             .then(async (boxes) => {
-                displayFaceBox(boxes)
+                await displayFaceBox(boxes)
                 // Show only if the submit of the image was successfull 
                 const userResult = await put('http://localhost:3000/image', {email : user.email })
                 setUser(userResult)
@@ -75,7 +76,7 @@ const Home = ({ user, setUser, loggedIn }) => {
             <Logo />
             <Rank rank={entries} name={user.name} position={rank}/>
             <ImageLinkForm submitted={submitted}/>
-            <FaceRecognition visible={visible} boxes={ boxes } imageUrl = { imageUrl } />
+            <FaceRecognition boxes={ boxes } imageUrl = { imageUrl } />
         </>
     )
 }
@@ -83,7 +84,6 @@ const Home = ({ user, setUser, loggedIn }) => {
 const calculateFaces = ({outputs: out}) => {
     const regions = out[0].data.regions
     const faceBoxes = regions.map(calculateFaceLocations)
-
     return faceBoxes
 }
 // We destructure the region to get the bounding_box and we rename as box
