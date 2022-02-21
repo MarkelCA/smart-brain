@@ -17,6 +17,8 @@ const SignUp = () => {
 
     // Validation state variables
     const [ strongPassword, setStrongPassword ] = useState(false)
+    const [ mediumPassword, setMediumPassRegex ] = useState(false)
+    const [ weakPassword, setWeakPassword ] = useState(false)
     const [ emptyFields, setEmptyFields ] = useState(false)
     const [ emailInUse, setEmailInUse ] = useState(false)
     const [ emailErr, setEmailErr] = useState(false)
@@ -25,8 +27,18 @@ const SignUp = () => {
 
     // Check if confirmation of password is correct
     useEffect(() => {
-        const regex = /^.*(?=.{12,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$/
-        setStrongPassword(password.match(regex))
+        const strongPassRegex = /^.*(?=.{12,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$/
+        const isStrong = password.match(strongPassRegex)
+        setStrongPassword(isStrong)
+
+        if(!isStrong) {
+            const mediumPassRegex = /^.*(?=.{12,})(?=.*[a-zA-Z])(?=.*\d).*$/
+            const isMedium = password.match(mediumPassRegex)
+            setMediumPassRegex(isMedium)
+            setWeakPassword(!isMedium && password.length > 0)
+        }
+
+
         const theyMatch = password === repeatPassword
         setPasswordMatch(theyMatch)
         const repeatPasswordField = document.querySelector("input[name=confirm_password]")
@@ -36,7 +48,6 @@ const SignUp = () => {
         else {
             repeatPasswordField.classList.remove('error-field')
         }
-
     },[password, repeatPassword])
 
     // Check if email it's repeated
@@ -50,7 +61,8 @@ const SignUp = () => {
 
     // Check for null fields
     useEffect(() => {
-        setEmptyFields(!email || !name || !repeatPassword || !password)
+        if(emptyFields) setEmptyFields(false)
+        //setEmptyFields(!email || !name || !repeatPassword || !password)
         const emailRegex = /^\S+@\S+\.\S+$/
         setEmailErr(email.length > 0 ? !email.match(emailRegex) : false)
         setEmailInUse(false)
@@ -120,6 +132,8 @@ const SignUp = () => {
                     >Create Account</button>
                     { !passwordMatch ? (<p className='text-red-800 mt-4'>Passwords must be equal ❌</p>) : ''}
                     { strongPassword ? (<p className='text-green-700 mt-4'>Strong password ✔️</p>) : ''}
+                    { mediumPassword ? (<p className='text-red-700 mt-4'>Medium password ⚠️</p>) : ''}
+                    { weakPassword ? (<p className='text-red-500 mt-4'>Weak password ⚠️</p>) : ''}
                     { emptyFields ? (<p className='text-red-800 mt-4'>All fields are required</p>) : ''}
                     { emailInUse ? (<p className='text-red-800 mt-4'>This email is already in use ❌</p>) : ''}
                     { emailErr ? (<p className='text-red-800 mt-4'>This email is not valid ❌</p>) : ''}
