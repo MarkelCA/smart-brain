@@ -9,9 +9,6 @@ import Rank from '../../components/Rank/Rank'
 import ImageLinkForm from '../../components/ImageLinkForm/ImageLinkForm'
 import FaceRecognition from '../../components/FaceRecognition/FaceRecognition'
 
-// Api
-import {FACE_DETECT_MODEL} from 'clarifai';
-import app from '../../api/api'
 // Utils
 import { put } from '../../utils/Utils'
 
@@ -55,19 +52,15 @@ const Home = ({ user, setUser, loggedIn }) => {
 
         setImageUrl(searchField_value)
 
-        app.models
-          .predict(FACE_DETECT_MODEL, searchField_value)
-          .then(calculateFaces)            // the response is passed as a parameter
-            .then(async (boxes) => {
-                await displayFaceBox(boxes)
-                // Show only if the submit of the image was successfull 
-                const userResult = await put('http://localhost:3000/image', {email : user.email })
-                setUser(userResult)
-                setEntries(userResult.entries)
-                setImageVisible(true)
-            })            // the calculated face location is passed as a parameter
-          .catch(console.log)                   // the error is passed as a paremeter
+        // We retrieve the regions and then we set the box on the image
+        put('http://localhost:3000/image', {email : user.email, input : searchField_value }).then(async(userResult) => {
+            const faceBoxes = userResult.regions.map(calculateFaceLocations)
+            await displayFaceBox(faceBoxes)
 
+            setUser(userResult.user)
+            setEntries(userResult.user.entries)
+            setImageVisible(true)
+        }).catch(console.log)
 
     }
     return (
@@ -78,14 +71,9 @@ const Home = ({ user, setUser, loggedIn }) => {
             <ImageLinkForm submitted={submitted}/>
             <FaceRecognition boxes={ boxes } imageUrl = { imageUrl } />
         </>
-    )
+    )   
 }
 
-const calculateFaces = ({outputs: out}) => {
-    const regions = out[0].data.regions
-    const faceBoxes = regions.map(calculateFaceLocations)
-    return faceBoxes
-}
 // We destructure the region to get the bounding_box and we rename as box
 const calculateFaceLocations = ({region_info : {bounding_box : face}}) => {
 

@@ -11,6 +11,7 @@ import Home from '../pages/Home/Home';
 import SignUp from '../pages/SignUp/SignUp'
 import SignIn from '../pages/SignIn/SignIn'
 import PageNotFound from '../pages/404/404';
+export const mainRoute = "http://localhost:3001"
 
 
 const App = () => {

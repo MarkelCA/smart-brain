@@ -66,7 +66,7 @@ const SignUp = () => {
         const emailRegex = /^\S+@\S+\.\S+$/
         setEmailErr(email.length > 0 ? !email.match(emailRegex) : false)
         setEmailInUse(false)
-    }, [email, name, repeatPassword, password])
+    }, [email, name, repeatPassword, password, emptyFields])
 
     const onSubmitSignIn = async (e) => {
         e.preventDefault()
